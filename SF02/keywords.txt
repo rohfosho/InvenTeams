@@ -1,0 +1,16 @@
+SF02				KEYWORD1
+getAuxUartBaudRate	KEYWORD2
+get00vDistance		KEYWORD2
+get33vDistance		KEYWORD2
+setAuxUartBaudRate	KEYWORD2
+set00vDistance		KEYWORD2
+set33vDistance		KEYWORD2
+getAnalogInputPin	KEYWORD2
+getAlarmInputPin	KEYWORD2
+setAnalogInputPin	KEYWORD2
+setAlarmInputPin	KEYWORD2
+getDistance			KEYWORD2
+getAnalogDistance	KEYWORD2
+getAlarmOutput		KEYWORD2
+getResult			KEYWORD2
+updateResult		KEYWORD2
