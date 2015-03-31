@@ -31,8 +31,14 @@ void loop()
   if(timer0 > interval){
     timer0-=interval;
     prevReading = sf02.getAnalogDistance()-0.80;
+    delay(10);
     Serial.print("Distance: ");
-    Serial.print(sf02.getAnalogDistance()-0.80);
+    currentReading = sf02.getAnalogDistance()-0.80;
+    Serial.print(currentReading);
+    if(prevReading != currentReading) {
+      //not detecting something that is stationary
+      //can beep 
+    }
     Serial.println(" m");
 
   }
