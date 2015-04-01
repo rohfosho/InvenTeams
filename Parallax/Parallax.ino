@@ -30,6 +30,10 @@ void setup()
   RF1.begin(rf1Serial);
   RF1.set00vDistance(0.0);
   RF1.setAnalogInputPin(1);
+  rf2Serial.begin(RF2.getAuxUartBaudRate());
+  RF2.begin(rf2Serial);
+  RF2.set00vDistance(0.0);
+  RF2.setAnalogInput(2);
 }
 
 void loop()
