@@ -42,8 +42,8 @@ void setup()
 void loop()
 {
     
-    curReading1 = RF1.getAnalogDistance()-0.80;
-    curReading2 = RF2.getAnalogDistance()-0.80;
+    curReading1 = RF1.getAnalogDistance()-0.8;
+    curReading2 = RF2.getAnalogDistance()-0.8;
     if(prevReading1 == 0.0 && prevReading2 == 0.0) {
       prevReading1 = curReading1;
       prevReading2 = curReading2;
