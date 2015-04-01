@@ -27,7 +27,7 @@ void setup()
   Serial.begin(TERMINAL_MONITOR_BAUDRATE);
   timer0 = 0;
   rf1Serial.begin(RF1.getAuxUartBaudRate());
-  RF1.begin(RF1);
+  RF1.begin(rf1Serial);
   RF1.set00vDistance(0.0);
   RF1.setAnalogInputPin(1);
 }
@@ -47,8 +47,6 @@ void loop()
     }
     Serial.println(" m");
     
-    
-
   }
 }
 

@@ -15,23 +15,23 @@ public:
 
 /* Arduino constructors */
 	void begin();
-	void begin(Stream &SerialInterface);
+	void begin(Stream& SerialInterface);
 	void end();
-	
+
 /* SF02 measurement property getters */
 	long getAuxUartBaudRate();
 	float get00vDistance();
 	float get33vDistance();
-	
+
 /* SF02 measurement property setters */
 	void setAuxUartBaudRate(long BaudRate);
 	void set00vDistance(float Distance);
 	void set33vDistance(float Distance);
-	
+
 /* Arduino input pin getters */
 	int getAnalogInputPin();
 	int getAlarmInputPin();
-	
+
 /* Arduino input pin setters */
 	void setAlarmInputPin(int Pin);
 	void setAnalogInputPin(int Pin);
@@ -40,7 +40,7 @@ public:
 	float getDistance(int Timeout = 100);
 	float getAnalogDistance();
 	int getAlarmOutput();
-	
+
 	bool updateResult();
 	float getResult();
 
@@ -50,7 +50,7 @@ private:
 	float _00vDistance;
 	float _33vDistance;
 	float _slope;
-	
+
 /* Arduino input pins */
 	int _analogInputPin;
 	int _alarmInputPin;
@@ -60,10 +60,10 @@ private:
 
 /* System variables */
 	bool _initialised;
-	
+
 	char _buffer[16];
 	int _bufferPos;
-	
+
 	bool _requestDistance;
 	float _lastResult;
 };
