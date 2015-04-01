@@ -18,8 +18,10 @@ SoftwareSerial rf2Serial(SERIAL_RX_PIN_2, SERIAL_TX_PIN_2);
 elapsedMillis timer();
 #define interval 20
 int timer0;
-float currentReading;
-float prevReading = 0.0;
+float curReading1;
+float curReading2;
+float prevReading1 = 0.0;
+float prevReading2 = 0.0;
 float velocity = 0.0;
 
 void setup()
@@ -33,24 +35,29 @@ void setup()
   rf2Serial.begin(RF2.getAuxUartBaudRate());
   RF2.begin(rf2Serial);
   RF2.set00vDistance(0.0);
-  RF2.setAnalogInput(2);
+  RF2.setAnalogInputPin(2);
 }
 
 void loop()
 {
-  if(timer0 > interval){
-    timer0-=interval;
-    prevReading = RF1.getAnalogDistance()-0.80;
-    delay(10);
+    curReading1 = RF1.getAnalogDistance()-0.80;
+    curReading2 = RF2.getAnalogDistance()-0.80;
     Serial.print("Distance: ");
-    currentReading = RF1.getAnalogDistance()-0.80;
-    Serial.print(currentReading);
-    if(prevReading != currentReading) {
-      //not detecting something that is stationary
-      //can beep 
+    Serial.print(curReading1);
+    if(prevReading1 < 0.05 && prevReading2 < 0.05) {
+      if(prevReading1 != curReading1) {
+        //not detecting something that is stationary
+        //can beep
+       Serial.print("beep"); 
+      }
+      if(prevReading2 != curReading2) {
+        //not detecting something that is stationary
+        //can beep 
+        Serial.print("beep");        
+      }
     }
     Serial.println(" m");
-    
-  }
+    prevReading1 = curReading1;
+    prevReading2 = curReading2;
 }
 
