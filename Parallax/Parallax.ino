@@ -7,8 +7,8 @@
 // Arduino Pin Definitions - Set these to whatever suits your Ardunio configuration.
 #define SERIAL_RX_PIN      11
 #define SERIAL_TX_PIN      10
-//#define SERIAL_RX_PIN_2 #
-//#define SERIAL_TX_PIN_2 #0
+#define SERIAL_RX_PIN_2     6
+#define SERIAL_TX_PIN_2     5
 
 SF02 RF1;
 SoftwareSerial rf1Serial(SERIAL_RX_PIN, SERIAL_TX_PIN);
