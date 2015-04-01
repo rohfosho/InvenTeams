@@ -16,18 +16,19 @@ SF02 RF2;
 SoftwareSerial rf2Serial(SERIAL_RX_PIN_2, SERIAL_TX_PIN_2);
 
 elapsedMillis timer();
-#define interval 20
-int timer0;
-float curReading1;
-float curReading2;
-float prevReading1 = 0.0;
-float prevReading2 = 0.0;
-float velocity = 0.0;
+#define interval 20        
+long t1, t2, dt;
+float curReading1, curReading2;
+float prevReading1 = 0.0, prevReading2 = 0.0;
+float d1, d2, dx;
+float v = 0.0;
+float x = 0.0508;
+float minChange = 0.5;
+float minVelocity = 2.0;
 
 void setup()
 {
   Serial.begin(TERMINAL_MONITOR_BAUDRATE);
-  timer0 = 0;
   rf1Serial.begin(RF1.getAuxUartBaudRate());
   RF1.begin(rf1Serial);
   RF1.set00vDistance(0.0);
@@ -40,23 +41,37 @@ void setup()
 
 void loop()
 {
+    
     curReading1 = RF1.getAnalogDistance()-0.80;
     curReading2 = RF2.getAnalogDistance()-0.80;
-    Serial.print("Distance: ");
-    Serial.print(curReading1);
-    if(prevReading1 < 0.05 && prevReading2 < 0.05) {
-      if(prevReading1 != curReading1) {
-        //not detecting something that is stationary
-        //can beep
-       Serial.print("beep"); 
-      }
-      if(prevReading2 != curReading2) {
-        //not detecting something that is stationary
-        //can beep 
-        Serial.print("beep");        
-      }
+    if(prevReading1 == 0.0 && prevReading2 == 0.0) {
+      prevReading1 = curReading1;
+      prevReading2 = curReading2;
     }
+    Serial.print("RF1 Distance: ");
+    Serial.print(curReading1);
     Serial.println(" m");
+    Serial.print("RF2 Distance: ");
+    Serial.print(curReading2);
+    Serial.println(" m");
+    float change1 = abs(curReading1 - prevReading1);
+    float change2 = abs(curReading2 - prevReading2);
+    dt = 0;
+    if(change1 > minChange) {
+      t1=millis();
+      d1 = curReading1;
+    }
+    if(change2 > minChange) {
+      t2=millis();
+      dt = t2-t1;
+      dt = dt * 0.001;
+      d2 = curReading2;
+      dx = sqrt(pow(x,2)+pow(abs(d1-d2),2));
+      v = dx/dt;
+    }
+    if(dt > 0 && v > minVelocity) {
+      Serial.print("beep");
+    }
     prevReading1 = curReading1;
     prevReading2 = curReading2;
 }
