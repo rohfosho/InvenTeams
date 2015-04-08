@@ -18,7 +18,7 @@ SoftwareSerial rf2Serial(SERIAL_RX_PIN_2, SERIAL_TX_PIN_2);
 
 elapsedMillis timer();
 #define interval 20
-long t1, t2, dt;
+unsigned long t1, t2, dt;
 float curReading1, curReading2;
 float prevReading1 = 0.0, prevReading2 = 0.0;
 float d1, d2, dx;
@@ -54,22 +54,25 @@ void loop()
     float change2 = prevReading2-curReading2;
     dt = 0;
     if(change1 >= minChange && detected != true) {
-      t1=millis();
+      t1=micros();
       d1 = curReading1;
+      Serial.println(t1);
       detected=true;
-      Serial.println(d1);
+      //Serial.println(d1);
     }
     if(change2 >= minChange && detected == true) {
-      t2=millis();
+      t2=micros();
       dt = t2-t1;
-      dt = dt * 0.001;
+      Serial.println(t2);
+      Serial.println(dt);
+      //Serial.println(dt);
       d2 = curReading2;
-      Serial.println(d2);
-      Serial.println(detected);
+      //Serial.println(d2);
       dx = sqrt(pow(x,2)+pow(abs(d1-d2),2));
-      Serial.println(dx);
+      //Serial.println(dx);
       v = dx/dt;
       detected = false;
+      Serial.println(v);
     }
     if(dt > 0 && v > minVelocity) {
       Serial.print("beep");
