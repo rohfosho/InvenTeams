@@ -1,4 +1,4 @@
-#include <elapsedMillis.h>
+#include <StopWatch.h>
 #include <SoftwareSerial.h>
 #include <SF02.h>
 
@@ -15,6 +15,8 @@ SF02 RF1;
 SoftwareSerial rf1Serial(SERIAL_RX_PIN, SERIAL_TX_PIN);
 SF02 RF2;
 SoftwareSerial rf2Serial(SERIAL_RX_PIN_2, SERIAL_TX_PIN_2);
+
+StopWatch sw;
 
 #define interval 20
 unsigned long t1;
@@ -44,6 +46,7 @@ void setup()
 
 void loop()
 {
+    sw.start();
     dx = 0;
     delay(100);
     curReading1 = RF1.getAnalogDistance()-2.8;
@@ -56,11 +59,13 @@ void loop()
     float change2 = prevReading2-curReading2;
     dt = 0;
     if(change1 >= minChange && detected != true) {
+      sw.reset();
       t1=micros();
       d1 = curReading1;
       detected=true;
     }
     if(change2 >= minChange && detected == true) {
+      sw.stop();
       dt = micros()-t1;
       timeElapsed = (double) (dt/1000);
       Serial.print("dt: ");
@@ -78,8 +83,6 @@ void loop()
       Serial.print("dx: ");
       Serial.println(dx,10);
       v = dx/(timeElapsed);
-      //Serial.print("v: ");
-      //Serial.println(v);
       detected = false;
       Serial.println(detected);
     }
