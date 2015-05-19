@@ -16,12 +16,11 @@ SoftwareSerial rf1Serial(SERIAL_RX_PIN, SERIAL_TX_PIN);
 SF02 RF2;
 SoftwareSerial rf2Serial(SERIAL_RX_PIN_2, SERIAL_TX_PIN_2);
 
-StopWatch sw;
+StopWatch sw(StopWatch::MICROS);
 
 #define interval 20
-unsigned long t1;
 unsigned long dt;
-double timeElapsed;
+long timeElapsed;
 float curReading1, curReading2;
 float prevReading1 = 0.0, prevReading2 = 0.0;
 float d1, d2, dx;
@@ -46,7 +45,6 @@ void setup()
 
 void loop()
 {
-    sw.start();
     dx = 0;
     delay(100);
     curReading1 = RF1.getAnalogDistance()-2.8;
@@ -58,34 +56,42 @@ void loop()
     float change1 = prevReading1-curReading1;
     float change2 = prevReading2-curReading2;
     dt = 0;
-    if(change1 >= minChange && detected != true) {
+    Serial.print("Change 1: ");
+      Serial.println(change1);
+    if(change1 >= minChange && !detected) {
       sw.reset();
-      t1=micros();
+      sw.start();
+      Serial.print("starting time: ");
+      Serial.println(sw.value());
       d1 = curReading1;
       detected=true;
     }
-    if(change2 >= minChange && detected == true) {
-      sw.stop();
-      dt = micros()-t1;
-      timeElapsed = (double) (dt/1000);
+
+    if(change2 >= minChange && detected) {
+      Serial.print("Change 2: ");
+      Serial.println(change2);
       Serial.print("dt: ");
       Serial.println(dt);
       d2 = curReading2;
-      Serial.print("d1: ");
-      Serial.print(d1);
-      Serial.print(", d2: ");
-      Serial.println(d2);
+      Serial.print("D1: ");
+        Serial.println(d1);
+      Serial.print("D2: ");
+        Serial.println(d2);
+      Serial.print("StopWatch Value: ");
+      Serial.println(sw.value());
+      sw.stop();
       double diff = d1-d2;
       if(diff < 0) {
         diff = -1*diff;
       }
       dx = sqrt(pow(x,2)+pow(diff,2));
-      Serial.print("dx: ");
-      Serial.println(dx,10);
-      v = dx/(timeElapsed);
+      //Serial.print("dx: ");
+      //Serial.println(dx,10);
+      //v = dx/(timeElapsed);
       detected = false;
-      Serial.println(detected);
+      //Serial.println(detected);
     }
+    
     if(dt > 0 && v > minVelocity) {
       //Serial.println("beep"); //make sound with buzzer
     }
